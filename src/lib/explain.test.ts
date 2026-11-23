@@ -84,6 +84,19 @@ describe('validateExplanation', () => {
     expect(validateExplanation('The room is available at this time.', false)).toBeNull();
     expect(validateExplanation('The room is unavailable at this time.', true)).toBeNull();
   });
+  it('accepts a correct negation for an unavailable slot ("not available", "isn\'t available")', () => {
+    const a = 'Seminar Room A-101 is not available from 10:30 to 11:40.';
+    const b = "Seminar Room A-101 isn't available from 10:30 to 11:40.";
+    expect(validateExplanation(a, false)).toBe(a);
+    expect(validateExplanation(b, false)).toBe(b);
+  });
+  it('rejects a positive booking claim for an unavailable slot', () => {
+    expect(validateExplanation('The room is free and can be booked at this time.', false)).toBeNull();
+    expect(validateExplanation('Seminar Room A-101 is bookable now.', false)).toBeNull();
+  });
+  it('rejects a negation for an available slot', () => {
+    expect(validateExplanation("Seminar Room A-101 isn't available at this time.", true)).toBeNull();
+  });
 });
 
 describe('explainAvailability', () => {

@@ -82,10 +82,18 @@ export function validateExplanation(text: unknown, isAvailable: boolean): string
   if (trimmed.length === 0 || trimmed.length > MAX_EXPLANATION_LENGTH) return null;
   const sentences = trimmed.split(/[.!?]+/).filter((s) => s.trim().length > 0);
   if (sentences.length > MAX_SENTENCES) return null;
-  const saysUnavailable = /\bunavailable\b|\bnot available\b/i.test(trimmed);
+  // Negated forms ("unavailable", "not available", "isn't available") say the slot is NOT bookable.
+  const NEGATED_AVAILABLE = /\bunavailable\b|(?:\bnot|n['\u2019]t)\s+available\b/gi;
+  const saysUnavailable = /\bunavailable\b|(?:\bnot|n['\u2019]t)\s+available\b/i.test(trimmed);
   if (isAvailable && saysUnavailable) return null;
-  if (!isAvailable && /\bavailable\b/i.test(trimmed) && !/\bunavailable\b/i.test(trimmed)) {
-    return null;
+  if (!isAvailable) {
+    // "no time slot can be booked" is a correct negative statement, so drop it before looking for positive claims.
+    const withoutNegations = trimmed
+      .replace(NEGATED_AVAILABLE, ' ')
+      .replace(/\bno\b[^.]{0,30}?\bcan be (?:booked|reserved)\b/gi, ' ');
+    const positiveClaim =
+      /\bavailable\b|\b(?:is|are)\s+free\b|\bcan be (?:booked|reserved)\b|\bbookable\b/i;
+    if (positiveClaim.test(withoutNegations)) return null;
   }
   return trimmed;
 }
