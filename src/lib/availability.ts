@@ -1,4 +1,14 @@
-import type { ReasonCode } from '@/lib/explainShared';
+export const REASON_CODES = [
+  'AVAILABLE',
+  'BLOCKED',
+  'OUT_OF_RANGE',
+  'INVALID_ORDER',
+  'PAST_TIME',
+  'TOO_LONG',
+  'OVERLAP',
+] as const;
+
+export type ReasonCode = (typeof REASON_CODES)[number];
 
 export const MAX_DURATION = 120; // minutes
 export const DAY_MINUTES = 1440;

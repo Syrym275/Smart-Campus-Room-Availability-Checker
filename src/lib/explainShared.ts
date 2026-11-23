@@ -1,16 +1,8 @@
-import { formatClock } from '@/lib/availability';
+import { formatClock, REASON_CODES, type ReasonCode } from '@/lib/availability';
 
-export const REASON_CODES = [
-  'AVAILABLE',
-  'BLOCKED',
-  'OUT_OF_RANGE',
-  'INVALID_ORDER',
-  'PAST_TIME',
-  'TOO_LONG',
-  'OVERLAP',
-] as const;
-
-export type ReasonCode = (typeof REASON_CODES)[number];
+// The reason codes are owned by the rules module (availability.ts); re-exported here for the explanation layer.
+export { REASON_CODES };
+export type { ReasonCode };
 
 export type ExplainRequest = {
   roomLabel: string;
