@@ -2,28 +2,31 @@
 
 ## Product intent & audience
 
-- App with filtering UI for activities/venues/events; users filter by attendee count and availability.
-- Production-quality, not a demo/prototype.
+- Project imported from GitHub: https://github.com/Syrym275/Smart-Campus-Room-Availability-Checker
+- App name: "Room Availability Checker" (Smart Campus Room Availability Checker)
+- Purpose: Prototype tool for checking campus room availability; users filter rooms by capacity and equipment and see if a time slot is free.
+- Target audience: Campus students/staff needing to find and book available rooms.
+- Data is hard-coded in the app — no backend or database integration yet.
+- Next steps not yet decided by user; potential directions mentioned: real database for bookings, design improvements, new features.
 
 ## Brand personality & voice
 
-- Polish and correctness matter; regression tests are used to lock in confirmed bugs before fixing.
+- Not yet established.
 
 ## Visual design & UX direction
 
-- Filter panel includes a numeric "Attendees" field (labeled input, `getByLabelText('Attendees')`).
-- Controlled inputs route every change through parsing helpers in `src/lib/filtering.ts`.
+- Stack: React + Vite + TypeScript.
+- No specific design details inferred yet.
 
 ## Decisions, constraints & rationale
 
-- Stack: Vite + React (JSX), Tailwind CSS, Lucide React icons, `@/` path alias → `src/`.
-- Tests: Vitest (v2.1.9) + Testing Library (`fireEvent`, `screen`); `npx vitest run` is the canonical command.
-- Test files: `src/App.test.tsx`, `src/lib/filtering.test.ts`, `src/lib/availability.test.ts`.
-- Known confirmed bug: `parseAttendees` in `src/lib/filtering.ts` resets cleared/empty Attendees input to `1` immediately, making retyping unreliable.
-- Regression test added in `src/App.test.tsx` asserting cleared field stays `''`; currently failing as expected (1 failed, 34 passed). No app code changed yet; fix pending user go-ahead.
-- Constraint: do not weaken or delete existing tests; add only focused regression tests for confirmed risks.
+- Project successfully cloned into workspace from GitHub.
+- Chat interface cannot report token usage or remaining capacity to the user.
+- Current data is static/hard-coded; no persistence layer exists yet.
 
 ## Open questions & assumptions
 
-- Fix for `parseAttendees` (allow empty string to persist until blur or valid entry) is pending user approval.
-- Assumed desired behavior: empty Attendees field should remain empty so users can type a new number; exact UX (e.g. commit on blur vs. on change) not yet specified.
+- What does the user want to change or build next?
+- Should the app connect to a real backend/database for booking persistence?
+- What design direction or improvements are desired?
+- Assumption: user wants to continue building on the existing codebase structure and conventions.

@@ -6,6 +6,7 @@ import {
   validateExplanation,
   type ExplainOutcome,
   type ExplainRequest,
+  type ReasonCode,
 } from '@/lib/explainShared';
 import { detectMockMode, mockExplain } from '@/lib/mockAi';
 
@@ -65,7 +66,7 @@ export function buildRequest(
   endMinute: number,
   result:
     | { status: 'available' }
-    | { status: 'unavailable'; reason: string },
+    | { status: 'unavailable'; reason: string; code: ReasonCode },
 ): ExplainRequest {
   const reasonCode = reasonCodeFor(result);
   return {

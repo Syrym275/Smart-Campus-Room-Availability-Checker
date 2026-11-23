@@ -1,3 +1,5 @@
+import type { ReasonCode } from '@/lib/explainShared';
+
 export const MAX_DURATION = 120; // minutes
 export const DAY_MINUTES = 1440;
 export const MIN_MINUTE = 0;
@@ -7,7 +9,7 @@ export type Booking = { start: number; end: number };
 
 export type CheckResult =
   | { status: 'available' }
-  | { status: 'unavailable'; reason: string };
+  | { status: 'unavailable'; reason: string; code: ReasonCode };
 
 export function isMinuteInRange(value: number): boolean {
   return value >= MIN_MINUTE && value <= MAX_MINUTE;
@@ -40,24 +42,27 @@ export function canBook(
   blocked: boolean,
 ): CheckResult {
   if (blocked) {
-    return { status: 'unavailable', reason: 'The room is blocked.' };
+    return { status: 'unavailable', reason: 'The room is blocked.', code: 'BLOCKED' };
   }
   if (start < MIN_MINUTE || end > MAX_MINUTE) {
     return {
       status: 'unavailable',
       reason: `Times must be between ${MIN_MINUTE} and ${MAX_MINUTE} minutes after midnight.`,
+      code: 'OUT_OF_RANGE',
     };
   }
   if (start >= end) {
     return {
       status: 'unavailable',
       reason: 'The end time must be after the start time.',
+      code: 'INVALID_ORDER',
     };
   }
   if (start <= now) {
     return {
       status: 'unavailable',
       reason: `The start time must be after the current time (${formatClock(now)}).`,
+      code: 'PAST_TIME',
     };
   }
   if (end - start > MAX_DURATION) {
@@ -65,6 +70,7 @@ export function canBook(
     return {
       status: 'unavailable',
       reason: `The booking is longer than ${limit}. The maximum allowed duration is ${limit}.`,
+      code: 'TOO_LONG',
     };
   }
   for (const b of bookings) {
@@ -72,6 +78,7 @@ export function canBook(
       return {
         status: 'unavailable',
         reason: `It overlaps the existing booking ${b.start}-${b.end} (${formatClock(b.start)}-${formatClock(b.end)}).`,
+        code: 'OVERLAP',
       };
     }
   }

@@ -86,6 +86,22 @@ describe('canBook', () => {
   it('formatClock renders 1440 as 24:00', () => {
     expect(formatClock(1440)).toBe('24:00');
   });
+
+  it('carries the correct reason code for each unavailable case', () => {
+    const blockedCode = canBook(700, 750, NOW, BOOKINGS, true);
+    const outOfRangeCode = canBook(-1, 600, NOW, BOOKINGS, false);
+    const invalidOrderCode = canBook(660, 600, NOW, BOOKINGS, false);
+    const pastTimeCode = canBook(NOW, NOW + 30, NOW, BOOKINGS, false);
+    const tooLongCode = canBook(660, 781, NOW, BOOKINGS, false);
+    const overlapCode = canBook(630, 700, NOW, BOOKINGS, false);
+
+    expect(blockedCode.status === 'unavailable' && blockedCode.code).toBe('BLOCKED');
+    expect(outOfRangeCode.status === 'unavailable' && outOfRangeCode.code).toBe('OUT_OF_RANGE');
+    expect(invalidOrderCode.status === 'unavailable' && invalidOrderCode.code).toBe('INVALID_ORDER');
+    expect(pastTimeCode.status === 'unavailable' && pastTimeCode.code).toBe('PAST_TIME');
+    expect(tooLongCode.status === 'unavailable' && tooLongCode.code).toBe('TOO_LONG');
+    expect(overlapCode.status === 'unavailable' && overlapCode.code).toBe('OVERLAP');
+  });
 });
 
 describe('checkRoom', () => {
@@ -93,6 +109,7 @@ describe('checkRoom', () => {
     expect(checkRoom(D404, 700, 750, NOW)).toEqual({
       status: 'unavailable',
       reason: 'The room is blocked.',
+      code: 'BLOCKED',
     });
   });
 
@@ -122,6 +139,7 @@ describe('regression: AC and F rules', () => {
     expect(checkRoom(D404, 900, 960, NOW)).toEqual({
       status: 'unavailable',
       reason: 'The room is blocked.',
+      code: 'BLOCKED',
     });
   });
 

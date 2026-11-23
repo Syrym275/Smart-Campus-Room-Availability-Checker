@@ -29,17 +29,10 @@ export const EXPLAIN_TIMEOUT_MS = 2000;
 export function reasonCodeFor(
   result:
     | { status: 'available' }
-    | { status: 'unavailable'; reason: string },
+    | { status: 'unavailable'; reason: string; code: ReasonCode },
 ): ReasonCode {
   if (result.status === 'available') return 'AVAILABLE';
-  const reason = result.reason;
-  if (reason === 'The room is blocked.') return 'BLOCKED';
-  if (reason.startsWith('Times must be between')) return 'OUT_OF_RANGE';
-  if (reason === 'The end time must be after the start time.') return 'INVALID_ORDER';
-  if (reason.startsWith('The start time must be after')) return 'PAST_TIME';
-  if (reason.startsWith('The booking is longer than')) return 'TOO_LONG';
-  if (reason.startsWith('It overlaps')) return 'OVERLAP';
-  return 'BLOCKED';
+  return result.code;
 }
 
 export function fallbackExplanation(req: ExplainRequest): string {

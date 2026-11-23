@@ -78,3 +78,26 @@ The current time is fixed at 09:00 for every check.
 | D-404 | Computer Lab D-404 | 40 | Computers, Projector | Yes | None |
 
 Equipment options offered in the filter: Projector, Whiteboard, Microphone, Computers.
+
+## Commands
+
+```bash
+npm install
+npm run dev
+npx vitest run
+npm run lint
+npm run typecheck
+npm run build
+```
+
+## Acceptance criteria
+
+AC1: Availability rules are unchanged: a blocked room is never available; the end must be after the start; the start must be after the current time; the duration is at most 120 minutes; overlapping an existing booking is unavailable.
+AC2: Room filtering by capacity and equipment is unchanged, including the Attendees field staying empty while the user types.
+AC3: canBook/checkRoom remain the only authority. The optional explanation never changes the Available/Unavailable status, is clearly labeled, and falls back safely on any failure.
+AC4: No secrets, real personal data, login, database, booking creation or network calls.
+AC5: npx vitest run, npm run lint, npm run typecheck and npm run build all pass, and the number of tests never drops below the baseline.
+
+## Agent instructions
+
+See AGENTS.md at the repository root.

@@ -15,11 +15,13 @@ const available: CheckResult = { status: 'available' };
 const overlap: CheckResult = {
   status: 'unavailable',
   reason: 'It overlaps the existing booking 600-660 (10:00-11:00).',
+  code: 'OVERLAP',
 };
-const blocked: CheckResult = { status: 'unavailable', reason: 'The room is blocked.' };
+const blocked: CheckResult = { status: 'unavailable', reason: 'The room is blocked.', code: 'BLOCKED' };
 const past: CheckResult = {
   status: 'unavailable',
   reason: 'The start time must be after the current time (09:00).',
+  code: 'PAST_TIME',
 };
 
 describe('reasonCodeFor', () => {
