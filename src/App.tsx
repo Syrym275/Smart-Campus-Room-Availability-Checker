@@ -4,6 +4,7 @@ import { AvailabilityForm } from '@/components/AvailabilityForm';
 import { BookingList } from '@/components/BookingList';
 import { FilterPanel } from '@/components/FilterPanel';
 import { ResultBanner } from '@/components/ResultBanner';
+import { ExplainSection } from '@/components/ExplainSection';
 import { RoomSelector } from '@/components/RoomSelector';
 import { RoomSummary } from '@/components/RoomSummary';
 import { checkRoom, parseMinutes, type CheckResult } from '@/lib/availability';
@@ -107,6 +108,15 @@ export default function App() {
         />
 
         {result && room && <ResultBanner result={result} roomName={room.name} />}
+
+        {result && room && startParse.kind === 'ok' && endParse.kind === 'ok' && (
+          <ExplainSection
+            roomLabel={room.name}
+            startMinute={startParse.value}
+            endMinute={endParse.value}
+            result={result}
+          />
+        )}
 
         <footer className="mt-auto pt-4 text-center text-xs text-slate-400">
           Prototype with fictional data. No bookings are created or saved.

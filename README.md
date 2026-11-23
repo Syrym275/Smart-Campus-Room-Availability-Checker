@@ -58,6 +58,14 @@ src/
     filtering.test.ts       Tests for the filtering rules
 ```
 
+## Explain availability
+
+After a check, an optional "Explain availability" button shows a short written explanation of the result. The text comes from a clearly labeled mock adapter, not a real model, and is never a booking confirmation. The confirmed status is always the Available / Unavailable banner above it, which the deterministic checker (`canBook` / `checkRoom` in `src/lib/availability.ts`) decides alone.
+
+- The adapter can be forced into demo modes with a URL parameter: `?mock=ok`, `?mock=error`, `?mock=timeout`, `?mock=malformed` or `?mock=contradiction` (default `ok`).
+- If the adapter fails, is slow (over 2 seconds) or produces text that contradicts the status, a fixed "Standard explanation (no AI)" is shown instead, built directly from the check result.
+- The feature never changes the result banner or any booking data.
+
 ## Fictional room data
 
 The current time is fixed at 09:00 for every check.

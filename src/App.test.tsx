@@ -19,6 +19,35 @@ describe('room filtering in the app', () => {
   });
 });
 
+describe('attendees input in the app', () => {
+  it('keeps the attendees field empty after it is cleared so a new number can be typed', () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText('Attendees'), { target: { value: '30' } });
+    fireEvent.change(screen.getByLabelText('Attendees'), { target: { value: '' } });
+
+    expect((screen.getByLabelText('Attendees') as HTMLInputElement).value).toBe('');
+  });
+});
+
+describe('explain availability in the app', () => {
+  it('shows the fallback label on adapter failure and leaves the status unchanged', async () => {
+    window.history.replaceState(null, '', '/?mock=error');
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText('Start'), { target: { value: '570' } });
+    fireEvent.change(screen.getByLabelText('End'), { target: { value: '600' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Check availability' }));
+    expect(screen.getByText('Available')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Explain availability' }));
+    expect(await screen.findByText('Standard explanation (no AI)')).toBeInTheDocument();
+
+    expect(screen.getByText('Available')).toBeInTheDocument();
+    window.history.replaceState(null, '', '/');
+  });
+});
+
 describe('room switching in the app', () => {
   it('clears the old availability result when the selected room changes (F5)', () => {
     render(<App />);
@@ -32,17 +61,5 @@ describe('room switching in the app', () => {
 
     expect(screen.queryByText('Unavailable')).not.toBeInTheDocument();
     expect(screen.queryByText('Available')).not.toBeInTheDocument();
-  });
-});
-
-describe('attendees input in the app', () => {
-  it('keeps the attendees field empty after it is cleared', () => {
-    render(<App />);
-
-    const input = screen.getByLabelText('Attendees') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: '30' } });
-    fireEvent.change(input, { target: { value: '' } });
-
-    expect(input.value).toBe('');
   });
 });

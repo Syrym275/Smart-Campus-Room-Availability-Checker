@@ -10,3 +10,7 @@ Run tests: npx vitest run
 ## Verification
 Run existing tests and add focused regression tests.
 Report changed files, rationale and test evidence.
+## Practice 11 — optional "Explain availability" feature
+Acceptance criteria AC1–AC5 apply to this feature.
+The LLM (mock adapter) never decides availability; canBook/checkRoom in src/lib/availability.ts remains the only authority.
+Commands: npx vitest run, npm run lint, npm run typecheck, npm run build.
