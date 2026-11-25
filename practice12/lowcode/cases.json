@@ -1,0 +1,9 @@
+[
+ {"id":"T1","name":"valid free interval","start":"12:00","duration":60,"blocked":false,"available":true,"code":"AVAILABLE"},
+ {"id":"T2","name":"overlap with existing booking 10:00-11:00","start":"10:30","duration":60,"blocked":false,"available":false,"code":"OVERLAP"},
+ {"id":"T3","name":"blocked room","start":"12:00","duration":60,"blocked":true,"available":false,"code":"BLOCKED"},
+ {"id":"T4","name":"duration = 0","start":"12:00","duration":0,"blocked":false,"available":false,"code":"INVALID_DURATION"},
+ {"id":"T5","name":"duration = 121","start":"12:00","duration":121,"blocked":false,"available":false,"code":"INVALID_DURATION"},
+ {"id":"T6","name":"past start time (08:00, now = 09:00)","start":"08:00","duration":30,"blocked":false,"available":false,"code":"PAST_START"},
+ {"id":"T7","name":"adjacent interval 11:00-12:00","start":"11:00","duration":60,"blocked":false,"available":true,"code":"AVAILABLE"}
+]

@@ -1,0 +1,15 @@
+T1 PASS | expected true AVAILABLE | observed true AVAILABLE | Available: the room is free from 12:00 to 13:00.
+T2 PASS | expected false OVERLAP | observed false OVERLAP | Unavailable: it overlaps the existing booking 10:00-11:00.
+T3 PASS | expected false BLOCKED | observed false BLOCKED | Unavailable: the room is blocked.
+T4 PASS | expected false INVALID_DURATION | observed false INVALID_DURATION | Invalid: duration must be between 1 and 120 minutes.
+T5 PASS | expected false INVALID_DURATION | observed false INVALID_DURATION | Invalid: duration must be between 1 and 120 minutes.
+T6 PASS | expected false PAST_START | observed false PAST_START | Invalid: the start time must be after the current time (09:00).
+T7 PASS | expected true AVAILABLE | observed true AVAILABLE | Available: the room is free from 11:00 to 12:00.
+T8 PASS | bookings unchanged after checks: true
+TOTAL 8 / 8
+EXTRA "" "30" -> INVALID_INPUT
+EXTRA "abc" "30" -> INVALID_INPUT
+EXTRA "12:00" "" -> INVALID_INPUT
+EXTRA "12:00" "-5" -> INVALID_INPUT
+EXTRA "12:00" "1.5" -> INVALID_INPUT
+EXTRA "<script>alert(1)</script>" "30" -> INVALID_INPUT
